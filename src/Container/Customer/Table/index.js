@@ -71,6 +71,8 @@ const DialogTitle = withStyles(styles)((props) => {
     );
 });
 
+const prio = [{ label: 'None', value: 'None' }, { label: 'Low', value: 'Low' },
+{ label: 'Medium', value: 'Medium' }, { label: 'High', value: 'High' }]
 class Table extends React.Component {
     constructor(props) {
         super(props);
@@ -79,6 +81,7 @@ class Table extends React.Component {
             selectedRow: null,
             showModal: false,
             selectedDate: new Date('2014-08-18T21:11:54'),
+            priority: 'None'
         }
     }
     // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
@@ -104,6 +107,11 @@ class Table extends React.Component {
 
         })
     }
+    inputChangeHandler = (name, value) => {
+        console.log("val", value)
+        this.setState({ [name]: value });
+    }
+
     popupToggle = () => {
         this.setState((preState) => {
             return { showModal: !preState.showModal }
@@ -124,7 +132,8 @@ class Table extends React.Component {
                         </Col>
                         <Col md='8' sm='8'>
                             <input type='text' value={this.state.name}
-                                onChange={(event) => this.inputChangeHandler('name', event)} />
+                                style={{ width: '220px' }}
+                                onChange={(event) => this.inputChangeHandler('name', event.target.value)} />
                         </Col>
                     </Row>
                     <Row style={{ padding: '5px' }}>
@@ -144,13 +153,12 @@ class Table extends React.Component {
                         </Col>
                         <Col md='8' sm='8'>
                             <form >
-                                <select name="cars" id="cars">
-                                    <option value="volvo">Volvo</option>
-                                    <option value="saab">Saab</option>
-                                    <option value="opel">Opel</option>
-                                    <option value="audi">Audi</option>
+                                <select >
+                                    {prio.map((val) => {
+                                        return <option
+                                            onChange={() => this.inputChangeHandler('priority', val.value)}>{val.value}</option>
+                                    })}
                                 </select>
-
                             </form>
                         </Col>
                     </Row>
