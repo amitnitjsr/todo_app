@@ -14,7 +14,7 @@ const initialState = {
             'id': 2,
             'summary': 'Create a list',
             'description': 'Create a list about simulating async action',
-            'completed': true,
+            'completed': false,
             'createdOn': '2020-03-26',
             'dueDate': '2020-05-26',
             'priority': 'None'
@@ -31,7 +31,7 @@ const initialState = {
             'id': 4,
             'summary': 'Create a dropdown',
             'description': 'Create a dropdown about simulating async action',
-            'completed': true,
+            'completed': false,
             'createdOn': '2020-04-26',
             'dueDate': '2020-06-26',
             'priority': 'Low'
@@ -55,7 +55,7 @@ const initialState = {
             'id': 7,
             'summary': 'Create a dropdown',
             'description': 'Create a dropdown about simulating async action',
-            'completed': true,
+            'completed': false,
             'createdOn': '2020-06-26',
             'dueDate': '2020-08-26',
             'priority': 'Low'
@@ -63,7 +63,7 @@ const initialState = {
             'id': 8,
             'summary': 'Create a dropdown',
             'description': 'Create a dropdown about simulating async action',
-            'completed': true,
+            'completed': false,
             'createdOn': '2020-02-26',
             'dueDate': '2020-04-26',
             'priority': 'High'

@@ -84,7 +84,8 @@ class Table extends React.Component {
             deleteBtnHide: true,
             edit: false,
             id: 1,
-            createdOn: ''
+            createdOn: '',
+            completed: false
         }
     }
     toggle = tab => {
@@ -134,7 +135,7 @@ class Table extends React.Component {
         this.setState({
             summary: data[0].summary, description: data[0].description,
             selectedDate: (data[0].dueDate), priority: data[0].priority, edit: true, id: id,
-            createdOn: data[0].createdOn
+            createdOn: data[0].createdOn, completed: data[0].completed
         })
         this.popupToggle();
     }
@@ -144,7 +145,7 @@ class Table extends React.Component {
         if (this.state.edit) {
             this.props.editTask({
                 "id": parseInt(this.state.id),
-                "summary": this.state.summary, "description": this.state.description,
+                "summary": this.state.summary, "description": this.state.description, "completed": this.state.completed,
                 "priority": this.state.priority, "createdOn": this.state.createdOn, "dueDate": this.state.selectedDate
             });
         }
@@ -157,7 +158,7 @@ class Table extends React.Component {
             let yyyy = createdOn.getFullYear();
             createdOn = yyyy + '-' + mm + '-' + dd;
             this.props.addNewTask({
-                "summary": this.state.summary, "description": this.state.description,
+                "summary": this.state.summary, "description": this.state.description, "completed": false,
                 "priority": this.state.priority, "createdOn": createdOn, "dueDate": this.state.selectedDate
             });
         }

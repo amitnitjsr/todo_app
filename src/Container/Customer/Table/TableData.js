@@ -71,11 +71,11 @@ export default class Table extends Component {
                                         >
                                             <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
                                         </IconButton>
-                                        {/* <IconButton
-                                        onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
+                                        <IconButton
+                                            onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
                                         >
-                                            <i className="zmdi zmdi-delete zmdi-hc-fw table-icon" />
-                                        </IconButton> */}
+                                            <span style={{ fontSize: '12px' }}>{row.row._original.completed ? 're-open' : 'open'}</span>
+                                        </IconButton>
                                     </span>
                                 );
                             }
