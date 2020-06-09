@@ -41,7 +41,7 @@ function Navbar(props) {
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Col className="col-md-1 col-sm-1 ml-auto">
-                        <Link to='/customer' className="link" >
+                        <Link to='/addtask' className="link" >
                             <i className="zmdi zmdi-home zmdi-hc-lg"></i>
                         </Link>
                     </Col>

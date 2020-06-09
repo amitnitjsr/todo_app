@@ -72,7 +72,7 @@ export default class Table extends Component {
                                             <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
                                         </IconButton>
                                         <IconButton
-                                            onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
+                                            onClick={() => this.props.reOpen(row.row._original.id)}
                                         >
                                             <span style={{ fontSize: '12px' }}>{row.row._original.completed ? 're-open' : 'open'}</span>
                                         </IconButton>

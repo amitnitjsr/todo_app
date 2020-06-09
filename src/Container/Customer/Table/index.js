@@ -164,6 +164,9 @@ class Table extends React.Component {
         }
         this.popupToggle();
     }
+    reOpen = () => {
+        console.log('reopen')
+    }
     deleteHandler = () => {
         if (Object.keys(this.state.selected).length !== 0) {
             this.props.deleteTask(this.state.selected);
@@ -299,15 +302,18 @@ class Table extends React.Component {
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                         </TabContent>
