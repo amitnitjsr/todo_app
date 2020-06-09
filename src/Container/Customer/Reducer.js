@@ -73,9 +73,9 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
-        case types.CREATE_NEW_CUSTOMER:
+        case types.CREATE_NEW_TASK:
         case types.DELETE_TASK:
-        case types.EDIT_CUSTOMER:
+        case types.EDIT_TASK:
             return {
                 ...state,
                 customerDetails: action.payload,

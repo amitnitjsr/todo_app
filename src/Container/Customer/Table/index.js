@@ -81,7 +81,10 @@ class Table extends React.Component {
             description: '',
             summary: '',
             searchInput: '',
-            deleteBtnHide: true
+            deleteBtnHide: true,
+            edit: false,
+            id: 1,
+            createdOn: ''
         }
     }
     toggle = tab => {
@@ -110,7 +113,7 @@ class Table extends React.Component {
     }
     inputChangeHandler = (name, value) => {
         this.setState({ [name]: value }, () => {
-            console.log('date', this.state.selectedDate)
+            console.log('date', this.state.priority)
         });
     }
 
@@ -119,14 +122,45 @@ class Table extends React.Component {
             return { showModal: !preState.showModal }
         })
     }
+    addToggle = () => {
+        this.popupToggle();
+        this.setState({
+            summary: '', description: '', priority: 'None', selectedDate: new Date('2014-08-18T21:11:54'),
+            edit: false
+        })
+    }
     editHandler = (id) => {
-        // state.list.filter(f => !array.includes(f.id.toString())
         let data = this.props.list.filter(f => id === f.id);
         this.setState({
             summary: data[0].summary, description: data[0].description,
-            selectedDate: (data[0].dueDate), priority: data[0].priority
+            selectedDate: (data[0].dueDate), priority: data[0].priority, edit: true, id: id,
+            createdOn: data[0].createdOn
         })
-        console.log('editHandler', id, data[0].priority)
+        this.popupToggle();
+    }
+
+    handleAddTask = () => {
+
+        if (this.state.edit) {
+            this.props.editTask({
+                "id": parseInt(this.state.id),
+                "summary": this.state.summary, "description": this.state.description,
+                "priority": this.state.priority, "createdOn": this.state.createdOn, "dueDate": this.state.selectedDate
+            });
+        }
+        else {
+            // console.log(this.state.summary, this.state.description, this.state.priority,
+            //     createdOn, this.state.selectedDate);
+            let createdOn = new Date();
+            let dd = String(createdOn.getDate()).padStart(2, '0');
+            let mm = String(createdOn.getMonth() + 1).padStart(2, '0');
+            let yyyy = createdOn.getFullYear();
+            createdOn = yyyy + '-' + mm + '-' + dd;
+            this.props.addNewTask({
+                "summary": this.state.summary, "description": this.state.description,
+                "priority": this.state.priority, "createdOn": createdOn, "dueDate": this.state.selectedDate
+            });
+        }
         this.popupToggle();
     }
     deleteHandler = () => {
@@ -145,7 +179,7 @@ class Table extends React.Component {
         let add_Edit_task = (
             <Dialog open={this.state.showModal} onClose={this.popupToggle}>
                 <DialogTitle onClose={this.popupToggle} >
-                    {this.state.editAdd ? 'Add: Task' : 'Edit: Task'}
+                    {!this.state.edit ? 'Add: Task' : 'Edit: Task'}
                 </DialogTitle>
                 <DialogContent>
                     <Row style={{ padding: '5px' }}>
@@ -175,8 +209,7 @@ class Table extends React.Component {
                             <span >Priority:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <select onClick={(event) => this.inputChangeHandler('priority', event.target.values)}
-                                value={this.state.priority}
+                            <select onClick={(event) => this.inputChangeHandler('priority', event.target.value)}
                             >
                                 {prio.map((val) => (
                                     <option
@@ -209,10 +242,10 @@ class Table extends React.Component {
                     <Button style={{
                         position: 'relative', left: '-4%'
                     }}
-                        onClick={this.handleSubmit
+                        onClick={this.handleAddTask
                         }
                     >
-                        {this.state.editAdd ? 'Add' : 'Edit'}
+                        {!this.state.edit ? 'Add' : 'Edit'}
                     </Button>
                 </DialogActions>
             </Dialog >
@@ -231,8 +264,8 @@ class Table extends React.Component {
                             />
                         </Col>
                         <Col sm="6">
-                            <Button className='button_color' onClick={() => this.popupToggle()}>+ Add Task</Button>
-                                    &nbsp;<Button disabled={this.state.editBtnHide} className='button_color' onClick={() => this.editHandler()}>Edit</Button>
+                            <Button className='button_color' onClick={() => this.addToggle()}>+ Add Task</Button>
+                            {/* &nbsp;<Button disabled={this.state.editBtnHide} className='button_color' onClick={() => this.editHandler()}>Edit</Button> */}
                                     &nbsp;<Button disabled={this.state.deleteBtnHide} className='button_color' onClick={() => this.deleteHandler()}>Delete</Button>
                         </Col>
                     </Row>
