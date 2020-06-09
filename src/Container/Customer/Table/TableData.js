@@ -2,8 +2,22 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
+// import { Tooltip } from 'reactstrap';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 export default class Table extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            tooltipOpen: false,
+        }
+    }
+    toggle = () => {
+        this.setState((preState) => {
+            return { tooltipOpen: !preState.tooltipOpen }
+        })
+    }
     render() {
         const { list } = this.props;
         return (
@@ -32,10 +46,21 @@ export default class Table extends Component {
                         },
                         {
                             Header: () => <div className="Header" >Summary</div>,
-                            accessor: 'summary',
+                            // accessor: 'summary',
                             className: 'text-center',
                             foldable: true,
                             filterable: false,
+                            Cell: (row) => {
+                                return (
+                                    <div>
+                                        <Tooltip title={'Click on, View All Details'} placement="top">
+                                            <span onClick={() => this.props.reOpen(row.row._original.id)} style={{ cursor: 'pointer' }} >
+                                                {row.row._original.summary}
+                                            </span>
+                                        </Tooltip>
+                                    </div>
+                                );
+                            }
                         },
                         {
                             Header: () => <div className="Header" >Priority</div>,
