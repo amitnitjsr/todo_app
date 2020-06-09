@@ -15,7 +15,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Input } from 'reactstrap';
 import classnames from 'classnames';
 import TableData from './TableData';
 import './Table.css';
@@ -80,6 +80,7 @@ class Table extends React.Component {
             activeTab: '1',
             description: '',
             summary: '',
+            searchInput: ''
         }
     }
     toggle = tab => {
@@ -92,7 +93,7 @@ class Table extends React.Component {
         );
     };
     toggleRow = (row) => {
-        console.log('toggleRow')
+
         const newSelected = Object.assign({}, this.state.selected);
         newSelected[row.id] = !this.state.selected[row.id];
         this.setState({ selected: newSelected }, () => {
@@ -122,6 +123,11 @@ class Table extends React.Component {
     editHandler = (id) => {
         console.log('editHandler', id)
         this.popupToggle();
+    }
+    inputSearchHandler = (name, e) => {
+        this.setState({ [name]: e.target.value }, () => {
+            // this.props.searchData(this.state.searchInput)
+        });
     }
     render() {
         const { list } = this.props;
@@ -158,16 +164,16 @@ class Table extends React.Component {
                             <span >Priority:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <form >
-                                <select >
-                                    {prio.map((val) => {
-                                        return <option
-                                            onClick={() => this.inputChangeHandler('priority', val.value)} >
-                                            {val.value}
-                                        </option>
-                                    })}
-                                </select>
-                            </form>
+                            <select onClick={(event) => this.inputChangeHandler('priority', event.target.value)}
+                                values={this.state.priority}
+                            >
+                                {prio.map((val) => (
+                                    <option
+                                    >
+                                        {val.value}
+                                    </option>
+                                ))}
+                            </select>
                         </Col>
                     </Row>
                     <Row style={{ padding: '5px' }}>
@@ -203,15 +209,23 @@ class Table extends React.Component {
                 <Navbar />
                 {add_Edit_task}
                 <div style={{ padding: '5%' }}>
-                    <Button style={{
-                        left: ' 2%',
-                        position: 'relative'
-                    }}
-                        onClick={() => this.popupToggle()}
-                    >
-                        <i className="zmdi zmdi-account-add zmdi-hc-lg"></i>&nbsp;
-                    Add Task
-                </Button>
+
+                    <Row >
+                        <Col sm="3">
+                            <Input type="text" placeholder="Search.."
+                                value={this.state.searchInput}
+                                name="search2"
+                                onChange={(event) => this.inputSearchHandler('searchInput', event)}
+                            />
+                        </Col>
+                        <Col sm="6">
+                            <Button className='button_color' onClick={() => this.popupToggle()}>+ Add Task</Button>
+                                    &nbsp;<Button disabled={this.state.editBtnHide} className='button_color' onClick={() => this.editHandler()}>Edit</Button>
+                                    &nbsp;<Button disabled={this.state.deleteBtnHide} className='button_color' onClick={() => this.deleteHandler()}>Delete</Button>
+                        </Col>
+                    </Row>
+
+
                     <div>
                         <Nav tabs>
                             <NavItem>
