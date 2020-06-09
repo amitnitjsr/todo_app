@@ -1,7 +1,7 @@
 import * as types from './ActionTypes';
 
 const initialState = {
-    customerDetails: [
+    taskDetails: [
         {
             'id': 1,
             'summary': 'Create a gist',
@@ -78,7 +78,7 @@ export default (state = initialState, action) => {
         case types.EDIT_TASK:
             return {
                 ...state,
-                customerDetails: action.payload,
+                taskDetails: action.payload,
             }
 
 

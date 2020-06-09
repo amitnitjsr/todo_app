@@ -320,7 +320,7 @@ class Table extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        list: state.customer.customerDetails,
+        list: state.customer.taskDetails,
     }
 }
 
