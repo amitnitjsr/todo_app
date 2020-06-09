@@ -77,7 +77,9 @@ class Table extends React.Component {
             showModal: false,
             selectedDate: new Date('2014-08-18T21:11:54'),
             priority: 'None',
-            activeTab: '1'
+            activeTab: '1',
+            description: '',
+            summary: '',
         }
     }
     toggle = tab => {
@@ -90,9 +92,11 @@ class Table extends React.Component {
         );
     };
     toggleRow = (row) => {
+        console.log('toggleRow')
         const newSelected = Object.assign({}, this.state.selected);
         newSelected[row.id] = !this.state.selected[row.id];
         this.setState({ selected: newSelected }, () => {
+            console.log('toggleRow selected', this.state.selected)
             if (this.state.selected[row.id] === false) {
                 delete this.state.selected[row.id];
             }
@@ -115,6 +119,10 @@ class Table extends React.Component {
             return { showModal: !preState.showModal }
         })
     }
+    editHandler = (id) => {
+        console.log('editHandler', id)
+        this.popupToggle();
+    }
     render() {
         const { list } = this.props;
         let add_Edit_task = (
@@ -129,9 +137,9 @@ class Table extends React.Component {
                             >Summary:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <input type='text' value={this.state.name}
+                            <input type='text' value={this.state.summary}
                                 style={{ width: '220px' }}
-                                onChange={(event) => this.inputChangeHandler('name', event.target.value)} />
+                                onChange={(event) => this.inputChangeHandler('summary', event.target.value)} />
                         </Col>
                     </Row>
                     <Row style={{ padding: '5px' }}>
@@ -140,9 +148,9 @@ class Table extends React.Component {
                             >Descriptions:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <textarea id="w3review" name="w3review" rows="4" cols="28">
-
-                            </textarea>
+                            <textarea id="w3review" name="w3review" rows="4" cols="28" value={this.state.description}
+                                onChange={(event) => this.inputChangeHandler('description', event.target.value)}
+                            />
                         </Col>
                     </Row>
                     <Row style={{ padding: '5px' }}>
@@ -154,7 +162,9 @@ class Table extends React.Component {
                                 <select >
                                     {prio.map((val) => {
                                         return <option
-                                            onChange={() => this.inputChangeHandler('priority', val.value)}>{val.value}</option>
+                                            onClick={() => this.inputChangeHandler('priority', val.value)} >
+                                            {val.value}
+                                        </option>
                                     })}
                                 </select>
                             </form>
@@ -165,7 +175,9 @@ class Table extends React.Component {
                             <span >Due Date:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <input type="date" id="birthday" name="birthday" />
+                            <input type="date" value={this.state.date}
+                                onChange={(event) => this.inputChangeHandler('date', event.target.value)}
+                            />
                         </Col>
                     </Row>
                 </DialogContent>
@@ -229,93 +241,16 @@ class Table extends React.Component {
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <ReactTable
-                                    data={list ? list : []}
-                                    columns={[
-                                        {
-                                            Header: () => <div className="ID"><i className="zmdi zmdi-plus" /></div>,
-                                            accessor: 'id',
-                                            className: 'text-center',
-                                            Cell: (row) => {
-                                                return (
-                                                    <Checkbox
-                                                        checked={this.state.selected[row.row._original.id] === true}
-                                                        onChange={() => {
-                                                            this.toggleRow(row.row._original);
-                                                        }}
-                                                    />
-                                                )
-                                            },
-                                            sortable: false,
-                                            filterable: false,
-                                            foldable: true,
-                                            width: 75
-                                        },
-                                        {
-                                            Header: () => <div className="Header" >Summary</div>,
-                                            accessor: 'name',
-                                            className: 'text-center',
-                                            foldable: true,
-                                            filterable: false,
-                                        },
-                                        {
-                                            Header: () => <div className="Header" >Priority</div>,
-                                            accessor: 'email',
-                                            foldable: true,
-                                            className: 'text-center',
-                                        },
-                                        {
-                                            Header: () => <div className="Header" >Created On</div>,
-                                            accessor: 'phone',
-                                            foldable: true,
-                                            className: 'text-center',
-                                        },
-                                        {
-                                            Header: () => <div className="Header" >Due Date</div>,
-                                            accessor: 'phone',
-                                            foldable: true,
-                                            className: 'text-center',
-                                        },
-                                        {
-                                            Header: () => <div className="Header" >Action</div>,
-                                            sortable: false,
-                                            filterable: false,
-                                            className: 'Action',
-                                            id: 'button',
-                                            width: 150,
-                                            Cell: (row) => {
-                                                return (
-                                                    <span className="action">
-                                                        <IconButton
-                                                            onClick={() =>
-                                                                this.props.history.push(
-                                                                    '/customer/edit/' + row.row._original.id + '/'
-                                                                )}
-                                                        >
-                                                            <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
-                                                        </IconButton>
-                                                        <IconButton
-                                                            onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
-                                                        >
-                                                            <i className="zmdi zmdi-delete zmdi-hc-fw table-icon" />
-                                                        </IconButton>
-                                                    </span>
-                                                );
-                                            }
-                                        },
-                                    ]}
-                                    pageSize={list.length}
-                                    showPaginationBottom={false}
-                                />
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="2">
-
-                                <h4>Completed</h4>
-
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="3">
-                                {/* <TableData list={list} /> */}
-                                <h4>Pending</h4>
+                                <TableData list={list} toggleRow={this.toggleRow}
+                                    selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                         </TabContent>
                     </div>

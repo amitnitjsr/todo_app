@@ -18,9 +18,9 @@ export default class Table extends Component {
                             Cell: (row) => {
                                 return (
                                     <Checkbox
-                                        checked={this.state.selected[row.row._original.id] === true}
+                                        checked={this.props.selected[row.row._original.id] === true}
                                         onChange={() => {
-                                            this.toggleRow(row.row._original);
+                                            this.props.toggleRow(row.row._original);
                                         }}
                                     />
                                 )
@@ -66,10 +66,8 @@ export default class Table extends Component {
                                 return (
                                     <span className="action">
                                         <IconButton
-                                            onClick={() =>
-                                                this.props.history.push(
-                                                    '/customer/edit/' + row.row._original.id + '/'
-                                                )}
+                                            onClick={() => this.props.editHandler(row.row._original.id)
+                                            }
                                         >
                                             <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
                                         </IconButton>
