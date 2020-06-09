@@ -80,7 +80,8 @@ class Table extends React.Component {
             activeTab: '1',
             description: '',
             summary: '',
-            searchInput: ''
+            searchInput: '',
+            deleteBtnHide: true
         }
     }
     toggle = tab => {
@@ -93,11 +94,9 @@ class Table extends React.Component {
         );
     };
     toggleRow = (row) => {
-
         const newSelected = Object.assign({}, this.state.selected);
         newSelected[row.id] = !this.state.selected[row.id];
         this.setState({ selected: newSelected }, () => {
-            console.log('toggleRow selected', this.state.selected)
             if (this.state.selected[row.id] === false) {
                 delete this.state.selected[row.id];
             }
@@ -107,12 +106,12 @@ class Table extends React.Component {
             else {
                 this.setState({ deleteBtnHide: true })
             }
-
         })
     }
     inputChangeHandler = (name, value) => {
-        console.log("val", value)
-        this.setState({ [name]: value });
+        this.setState({ [name]: value }, () => {
+            console.log('date', this.state.selectedDate)
+        });
     }
 
     popupToggle = () => {
@@ -121,8 +120,20 @@ class Table extends React.Component {
         })
     }
     editHandler = (id) => {
-        console.log('editHandler', id)
+        // state.list.filter(f => !array.includes(f.id.toString())
+        let data = this.props.list.filter(f => id === f.id);
+        this.setState({
+            summary: data[0].summary, description: data[0].description,
+            selectedDate: (data[0].dueDate), priority: data[0].priority
+        })
+        console.log('editHandler', id, data[0].priority)
         this.popupToggle();
+    }
+    deleteHandler = () => {
+        if (Object.keys(this.state.selected).length !== 0) {
+            this.props.deleteTask(this.state.selected);
+            this.setState({ selectedRow: null, selected: {}, deleteBtnHide: true, editBtnHide: true })
+        }
     }
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
@@ -164,8 +175,8 @@ class Table extends React.Component {
                             <span >Priority:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <select onClick={(event) => this.inputChangeHandler('priority', event.target.value)}
-                                values={this.state.priority}
+                            <select onClick={(event) => this.inputChangeHandler('priority', event.target.values)}
+                                value={this.state.priority}
                             >
                                 {prio.map((val) => (
                                     <option
@@ -181,8 +192,8 @@ class Table extends React.Component {
                             <span >Due Date:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <input type="date" value={this.state.date}
-                                onChange={(event) => this.inputChangeHandler('date', event.target.value)}
+                            <input type="date" value={this.state.selectedDate}
+                                onChange={(event) => this.inputChangeHandler('selectedDate', event.target.value)}
                             />
                         </Col>
                     </Row>
@@ -195,7 +206,9 @@ class Table extends React.Component {
                     >
                         Cancel
                     </Button>
-                    <Button
+                    <Button style={{
+                        position: 'relative', left: '-4%'
+                    }}
                         onClick={this.handleSubmit
                         }
                     >
@@ -209,7 +222,6 @@ class Table extends React.Component {
                 <Navbar />
                 {add_Edit_task}
                 <div style={{ padding: '5%' }}>
-
                     <Row >
                         <Col sm="3">
                             <Input type="text" placeholder="Search.."
@@ -224,8 +236,6 @@ class Table extends React.Component {
                                     &nbsp;<Button disabled={this.state.deleteBtnHide} className='button_color' onClick={() => this.deleteHandler()}>Delete</Button>
                         </Col>
                     </Row>
-
-
                     <div>
                         <Nav tabs>
                             <NavItem>
@@ -255,15 +265,15 @@ class Table extends React.Component {
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={list} toggleRow={this.toggleRow} deleteBtnHide={this.state.deleteBtnHide}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                         </TabContent>

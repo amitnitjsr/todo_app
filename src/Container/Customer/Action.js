@@ -21,12 +21,15 @@ export const addNewCustomer = (data) => {
 }
 
 
-export const deleteCustomer = (data) => {
-    const { id } = data;
+export const deleteTask = (data) => {
+    let result = Object.entries(data);
+    let array = result.map((val) => {
+        return val[0]
+    });
     return (dispatch, getState) => {
         const { customerDetails } = getState().customer;
-        const newData = customerDetails.filter((data) => data.id !== id);
-        return dispatch({ type: types.DELETE_CUSTOMER, payload: newData });
+        const newData = customerDetails.filter(f => !array.includes(f.id.toString()));
+        return dispatch({ type: types.DELETE_TASK, payload: newData });
     }
 }
 

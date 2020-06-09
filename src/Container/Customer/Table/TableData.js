@@ -32,26 +32,26 @@ export default class Table extends Component {
                         },
                         {
                             Header: () => <div className="Header" >Summary</div>,
-                            accessor: 'name',
+                            accessor: 'summary',
                             className: 'text-center',
                             foldable: true,
                             filterable: false,
                         },
                         {
                             Header: () => <div className="Header" >Priority</div>,
-                            accessor: 'email',
+                            accessor: 'priority',
                             foldable: true,
                             className: 'text-center',
                         },
                         {
                             Header: () => <div className="Header" >Created On</div>,
-                            accessor: 'phone',
+                            accessor: 'createdOn',
                             foldable: true,
                             className: 'text-center',
                         },
                         {
                             Header: () => <div className="Header" >Due Date</div>,
-                            accessor: 'phone',
+                            accessor: 'dueDate',
                             foldable: true,
                             className: 'text-center',
                         },
@@ -64,8 +64,8 @@ export default class Table extends Component {
                             width: 150,
                             Cell: (row) => {
                                 return (
-                                    <span className="action">
-                                        <IconButton
+                                    <span className="action" >
+                                        <IconButton disabled={!this.props.deleteBtnHide}
                                             onClick={() => this.props.editHandler(row.row._original.id)
                                             }
                                         >
