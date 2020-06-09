@@ -6,8 +6,8 @@ import {
 } from "react-router-dom";
 
 import App from './Container/home/App';
-import Customer from './Container/Customer/Table';
-import AddCustomer from './Container/Customer/Add';
+import AddTask from './Container/Customer/Table';
+// import AddCustomer from './Container/Customer/Add';
 import PageNotFound from './Container/PageNotFound';
 // import PreLoading from './Component/PreLoading';
 
@@ -23,16 +23,16 @@ const routes = (props) => {
                     component={App} />
                 <Route
                     exact
-                    path="/customer"
-                    component={Customer} />
-                <Route
+                    path="/addtask"
+                    component={AddTask} />
+                {/* <Route
                     exact
                     path="/customer/new"
                     component={AddCustomer} />
                 <Route
                     exact
                     path="/customer/edit/:id"
-                    component={AddCustomer} />
+                    component={AddCustomer} /> */}
                 <Route
                     path=""
                     component={PageNotFound} />
