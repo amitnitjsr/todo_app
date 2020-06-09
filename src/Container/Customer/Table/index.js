@@ -174,7 +174,7 @@ class Table extends React.Component {
                 <DialogActions>
                     <Button
                         style={{ left: '-10%', position: 'relative' }}
-                        onClick={this.handleSubmit
+                        onClick={this.popupToggle
                         }
                     >
                         Cancel
@@ -182,9 +182,6 @@ class Table extends React.Component {
                     <Button
                         onClick={this.handleSubmit
                         }
-                        disabled={this.state.emailValidation
-                            || this.state.phoneValidation}
-                        className='button_pos'
                     >
                         {this.state.editAdd ? 'Add' : 'Edit'}
                     </Button>
@@ -201,7 +198,6 @@ class Table extends React.Component {
                         position: 'relative'
                     }}
                         onClick={() => this.popupToggle()}
-
                     >
                         <i className="zmdi zmdi-account-add zmdi-hc-lg"></i>&nbsp;
                     Add Task
@@ -233,7 +229,8 @@ class Table extends React.Component {
                                 Header: () => <div className="Header" >Summary</div>,
                                 accessor: 'name',
                                 className: 'text-center',
-                                foldable: true
+                                foldable: true,
+                                filterable: false,
                             },
                             {
                                 Header: () => <div className="Header" >Priority</div>,
