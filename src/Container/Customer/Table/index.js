@@ -4,7 +4,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { Button } from 'reactstrap';
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
-// import DateFnsUtils from '@date-io/date-fns';
 import { bindActionCreators } from 'redux';
 import Checkbox from '@material-ui/core/Checkbox';
 import * as action from '../Action';
@@ -16,7 +15,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { withStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import { Row, Col, Input } from 'reactstrap';
+import { TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap';
+import classnames from 'classnames';
+import TableData from './TableData';
 import './Table.css';
 
 const styles = (theme) => ({
@@ -47,12 +48,6 @@ const DialogTitle = withStyles(styles)((props) => {
             disableTypography
             className={classes.root}
             {...other}
-        // style={{
-        //     // boxShadow: '0 2px 5px 0 rgba(0, 0, 0, 0.26)',
-        //     // background: '#1f2859'
-        //     // background: linear-gradient(45deg, rgba(2,0,36,1) 0%, rgba(222,8,152,1) 0%, rgba(240,142,37,1) 100%, rgba(245,178,7,0.969625350140056) 100%, rgba(255,0,219,1) 100%) !important;
-
-        // }}
         >
             <Typography style={{ color: 'white' }} variant="h6">
                 {children}
@@ -81,11 +76,14 @@ class Table extends React.Component {
             selectedRow: null,
             showModal: false,
             selectedDate: new Date('2014-08-18T21:11:54'),
-            priority: 'None'
+            priority: 'None',
+            activeTab: '1'
         }
     }
-    // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-
+    toggle = tab => {
+        if (this.state.activeTab !== tab)
+            this.setState({ activeTab: tab })
+    }
     handleDateChange = (date) => {
         this.setState(
             { selectedDate: date }
@@ -202,86 +200,127 @@ class Table extends React.Component {
                         <i className="zmdi zmdi-account-add zmdi-hc-lg"></i>&nbsp;
                     Add Task
                 </Button>
+                    <div>
+                        <Nav tabs>
+                            <NavItem>
+                                <NavLink
+                                    className={classnames({ active: this.state.activeTab === '1' })}
+                                    onClick={() => { this.toggle('1'); }}
+                                >
+                                    All Task
+                        </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink
+                                    className={classnames({ active: this.state.activeTab === '2' })}
+                                    onClick={() => { this.toggle('2'); }}
+                                >
+                                    Completed Task
+                        </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink
+                                    className={classnames({ active: this.state.activeTab === '3' })}
+                                    onClick={() => { this.toggle('3'); }}
+                                >
+                                    Pending Task
+                        </NavLink>
+                            </NavItem>
+                        </Nav>
+                        <TabContent activeTab={this.state.activeTab}>
+                            <TabPane tabId="1">
+                                <ReactTable
+                                    data={list ? list : []}
+                                    columns={[
+                                        {
+                                            Header: () => <div className="ID"><i className="zmdi zmdi-plus" /></div>,
+                                            accessor: 'id',
+                                            className: 'text-center',
+                                            Cell: (row) => {
+                                                return (
+                                                    <Checkbox
+                                                        checked={this.state.selected[row.row._original.id] === true}
+                                                        onChange={() => {
+                                                            this.toggleRow(row.row._original);
+                                                        }}
+                                                    />
+                                                )
+                                            },
+                                            sortable: false,
+                                            filterable: false,
+                                            foldable: true,
+                                            width: 75
+                                        },
+                                        {
+                                            Header: () => <div className="Header" >Summary</div>,
+                                            accessor: 'name',
+                                            className: 'text-center',
+                                            foldable: true,
+                                            filterable: false,
+                                        },
+                                        {
+                                            Header: () => <div className="Header" >Priority</div>,
+                                            accessor: 'email',
+                                            foldable: true,
+                                            className: 'text-center',
+                                        },
+                                        {
+                                            Header: () => <div className="Header" >Created On</div>,
+                                            accessor: 'phone',
+                                            foldable: true,
+                                            className: 'text-center',
+                                        },
+                                        {
+                                            Header: () => <div className="Header" >Due Date</div>,
+                                            accessor: 'phone',
+                                            foldable: true,
+                                            className: 'text-center',
+                                        },
+                                        {
+                                            Header: () => <div className="Header" >Action</div>,
+                                            sortable: false,
+                                            filterable: false,
+                                            className: 'Action',
+                                            id: 'button',
+                                            width: 150,
+                                            Cell: (row) => {
+                                                return (
+                                                    <span className="action">
+                                                        <IconButton
+                                                            onClick={() =>
+                                                                this.props.history.push(
+                                                                    '/customer/edit/' + row.row._original.id + '/'
+                                                                )}
+                                                        >
+                                                            <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
+                                                        </IconButton>
+                                                        <IconButton
+                                                            onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
+                                                        >
+                                                            <i className="zmdi zmdi-delete zmdi-hc-fw table-icon" />
+                                                        </IconButton>
+                                                    </span>
+                                                );
+                                            }
+                                        },
+                                    ]}
+                                    pageSize={list.length}
+                                    showPaginationBottom={false}
+                                />
+                            </TabPane>
+                            <TabPane tabId="2">
 
-                    <ReactTable
-                        data={list ? list : []}
-                        columns={[
-                            {
-                                Header: () => <div className="ID"><i className="zmdi zmdi-plus" /></div>,
-                                accessor: 'id',
-                                className: 'text-center',
-                                Cell: (row) => {
-                                    return (
-                                        <Checkbox
-                                            checked={this.state.selected[row.row._original.id] === true}
-                                            onChange={() => {
-                                                this.toggleRow(row.row._original);
-                                            }}
-                                        />
-                                    )
-                                },
-                                sortable: false,
-                                filterable: false,
-                                foldable: true,
-                                width: 75
-                            },
-                            {
-                                Header: () => <div className="Header" >Summary</div>,
-                                accessor: 'name',
-                                className: 'text-center',
-                                foldable: true,
-                                filterable: false,
-                            },
-                            {
-                                Header: () => <div className="Header" >Priority</div>,
-                                accessor: 'email',
-                                foldable: true,
-                                className: 'text-center',
-                            },
-                            {
-                                Header: () => <div className="Header" >Created On</div>,
-                                accessor: 'phone',
-                                foldable: true,
-                                className: 'text-center',
-                            },
-                            {
-                                Header: () => <div className="Header" >Due Date</div>,
-                                accessor: 'phone',
-                                foldable: true,
-                                className: 'text-center',
-                            },
-                            {
-                                Header: () => <div className="Header" >Action</div>,
-                                sortable: false,
-                                filterable: false,
-                                className: 'Action',
-                                id: 'button',
-                                width: 150,
-                                Cell: (row) => {
-                                    return (
-                                        <span className="action">
-                                            <IconButton
-                                                onClick={() =>
-                                                    this.props.history.push(
-                                                        '/customer/edit/' + row.row._original.id + '/'
-                                                    )}
-                                            >
-                                                <i className="zmdi zmdi-edit zmdi-hc-fnewstatusw table-icon" />
-                                            </IconButton>
-                                            <IconButton
-                                                onClick={() => this.props.deleteCustomer({ 'id': row.row._original.id })}
-                                            >
-                                                <i className="zmdi zmdi-delete zmdi-hc-fw table-icon" />
-                                            </IconButton>
-                                        </span>
-                                    );
-                                }
-                            },
-                        ]}
-                        pageSize={list.length}
-                        showPaginationBottom={false}
-                    />
+                                <h4>Completed</h4>
+
+                            </TabPane>
+                            <TabPane tabId="3">
+                                {/* <TableData list={list} /> */}
+                                <h4>Pending</h4>
+                            </TabPane>
+                        </TabContent>
+                    </div>
                 </div >
+
             </div>
         );
     }
