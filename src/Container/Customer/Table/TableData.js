@@ -2,22 +2,10 @@ import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
-// import { Tooltip } from 'reactstrap';
 import Tooltip from '@material-ui/core/Tooltip';
 
-
 export default class Table extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            tooltipOpen: false,
-        }
-    }
-    toggle = () => {
-        this.setState((preState) => {
-            return { tooltipOpen: !preState.tooltipOpen }
-        })
-    }
+
     render() {
         const { list } = this.props;
         return (
