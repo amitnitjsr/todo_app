@@ -164,39 +164,36 @@ class Table extends React.Component {
         }
         this.popupToggle();
     }
+
     reOpen = (id) => {
         let data = this.props.list.filter(f => id === f.id);
-        // this.setState({
-        //     summary: data[0].summary, description: data[0].description,
-        //     selectedDate: (data[0].dueDate), priority: data[0].priority, id: id,
-        //     createdOn: data[0].createdOn, completed: !(data[0].completed)
-        // });
-        console.log('cal', !(data[0].completed))
         this.props.editTask({
             "id": parseInt(id),
             "summary": data[0].summary, "description": data[0].description, "completed": !(data[0].completed),
             "priority": data[0].priority, "createdOn": data[0].createdOn, "dueDate": data[0].dueDate
         });
     }
+
     deleteHandler = () => {
         if (Object.keys(this.state.selected).length !== 0) {
             this.props.deleteTask(this.state.selected);
             this.setState({ selectedRow: null, selected: {}, deleteBtnHide: true, editBtnHide: true })
         }
     }
+
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
-
-            if (this.state.activeTab === '1') {
-                // All task -> list
-                // this.props.searchData(this.state.searchInput)
-            }
-            else if (this.state.activeTab === '2') {
-                // completed
-            }
-            else if (this.state.activeTab === '3') {
-                // pending
-            }
+            this.props.searchTask({ "searchInput": this.state.searchInput });
+            // if (this.state.activeTab === '1') {
+            //     // All task -> list
+            //     // this.props.searchData(this.state.searchInput)
+            // }
+            // else if (this.state.activeTab === '2') {
+            //     // completed
+            // }
+            // else if (this.state.activeTab === '3') {
+            //     // pending
+            // }
         });
     }
     render() {
