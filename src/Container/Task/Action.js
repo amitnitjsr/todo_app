@@ -74,19 +74,5 @@ export const searchTask = (data) => {
         }
 
     }
-    // let filteredData = ''
-    // if (action.payload.searchInput) {
-    //     filteredData = state.list.filter(value => {
-    //         return value.name
-    //             .toString()
-    //             .toLowerCase()
-    //             .includes(action.payload.searchInput.toLowerCase())
-    //     })
-    //     return {
-    //         "list": filteredData
-    //     }
-    // }
-    // else {
-    //     return { "list": Data }
-    // }
+
 }
