@@ -70,8 +70,13 @@ export const searchTask = (data) => {
             return dispatch({ type: types.SEARCH_TASK, payload: newData });
         }
         else {
-            console.log('else', searchInput.length)
             return dispatch({ type: types.SEARCH_TASK, payload: taskDetails });
         }
+    }
+}
+
+export const searchTaskList = (searchKey) => {
+    return (dispatch, getState) => {
+        return dispatch({ type: types.SEARCH_TASK, payload: searchKey.searchInput })
     }
 }

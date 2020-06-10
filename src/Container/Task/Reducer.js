@@ -69,25 +69,49 @@ const initialState = {
             'priority': 'High'
         }
     ],
-    completeTask: [],
+    completedTask: [],
     pendingTask: [],
 }
 
+const getCompletedTask = (list) => {
+    return list.filter(f => f.completed === true);
+}
+
+const getPendingTask = (list) => {
+    return list.filter(f => f.completed === false);
+}
+
+const searchDataSet = (searchKey) => {
+    let tempData = initialState.taskDetails;
+    if (searchKey) {
+        tempData = tempData.filter(d => {
+            if (d.summary.toUpperCase().includes(searchKey.toUpperCase())) {
+                return d;
+            }
+        });
+    }
+    return ({ taskDetails: tempData, completedTask: getCompletedTask(tempData), pendingTask: getPendingTask(tempData) })
+}
+
 export default (state = initialState, action) => {
-    state.completedTask = state.taskDetails.filter(f => f.completed === true);
-    state.pendingTask = state.taskDetails.filter(f => f.completed === false);
+    state.completedTask = getCompletedTask(state.taskDetails)
+    state.pendingTask = getPendingTask(state.taskDetails)
 
     switch (action.type) {
         case types.CREATE_NEW_TASK:
         case types.DELETE_TASK:
         case types.EDIT_TASK:
-        case types.SEARCH_TASK:
             const data = { ...state, taskDetails: action.payload }
-            state.completedTask = data.taskDetails.filter(f => f.completed === true);
-            state.pendingTask = data.taskDetails.filter(f => f.completed === false);
+            state.completedTask = getCompletedTask(data.taskDetails);
+            state.pendingTask = getPendingTask(data.taskDetails);
             return {
                 ...state,
                 taskDetails: action.payload,
+            }
+        case types.SEARCH_TASK:
+            return {
+                ...state,
+                ...searchDataSet(action.payload)
             }
         default:
             return state

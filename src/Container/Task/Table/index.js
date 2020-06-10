@@ -130,6 +130,7 @@ class Table extends React.Component {
             edit: false
         })
     }
+
     editHandler = (id) => {
         let data = this.props.list.filter(f => id === f.id);
         this.setState({
@@ -195,7 +196,9 @@ class Table extends React.Component {
     }
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
-            this.props.searchTask({ "searchInput": this.state.searchInput });
+            // this.props.searchTask({ "searchInput": this.state.searchInput });
+            this.props.searchTaskList({ "searchInput": this.state.searchInput });
+            // this.setState({ searchInput: '' })
             // if (this.state.activeTab === '1') {
             //     // All task -> list
             //     // this.props.searchData(this.state.searchInput)
