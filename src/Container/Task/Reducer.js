@@ -69,13 +69,22 @@ const initialState = {
             'priority': 'High'
         }
     ],
+    completeTask: [],
+    pendingTask: [],
 }
 
 export default (state = initialState, action) => {
+    state.completedTask = state.taskDetails.filter(f => f.completed === true);
+    state.pendingTask = state.taskDetails.filter(f => f.completed === false);
+
     switch (action.type) {
         case types.CREATE_NEW_TASK:
         case types.DELETE_TASK:
         case types.EDIT_TASK:
+            const data = { ...state, taskDetails: action.payload }
+            state.completedTask = data.taskDetails.filter(f => f.completed === true);
+            state.pendingTask = data.taskDetails.filter(f => f.completed === false);
+            console.log('data', data)
             return {
                 ...state,
                 taskDetails: action.payload,

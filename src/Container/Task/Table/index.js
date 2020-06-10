@@ -164,8 +164,19 @@ class Table extends React.Component {
         }
         this.popupToggle();
     }
-    reOpen = () => {
-        console.log('reopen')
+    reOpen = (id) => {
+        let data = this.props.list.filter(f => id === f.id);
+        // this.setState({
+        //     summary: data[0].summary, description: data[0].description,
+        //     selectedDate: (data[0].dueDate), priority: data[0].priority, id: id,
+        //     createdOn: data[0].createdOn, completed: !(data[0].completed)
+        // });
+        console.log('cal', !(data[0].completed))
+        this.props.editTask({
+            "id": parseInt(id),
+            "summary": data[0].summary, "description": data[0].description, "completed": !(data[0].completed),
+            "priority": data[0].priority, "createdOn": data[0].createdOn, "dueDate": data[0].dueDate
+        });
     }
     deleteHandler = () => {
         if (Object.keys(this.state.selected).length !== 0) {
@@ -175,11 +186,23 @@ class Table extends React.Component {
     }
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
-            // this.props.searchData(this.state.searchInput)
+
+            if (this.state.activeTab === '1') {
+                // All task -> list
+                // this.props.searchData(this.state.searchInput)
+            }
+            else if (this.state.activeTab === '2') {
+                // completed
+            }
+            else if (this.state.activeTab === '3') {
+                // pending
+            }
         });
     }
     render() {
-        const { list } = this.props;
+        const { list, completedTask, pendingTask } = this.props;
+        // const { completedTask } = this.props;
+
         let add_Edit_task = (
             <Dialog open={this.state.showModal} onClose={this.popupToggle}>
                 <DialogTitle onClose={this.popupToggle} >
@@ -307,12 +330,12 @@ class Table extends React.Component {
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={completedTask} toggleRow={this.toggleRow}
                                     deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={pendingTask} toggleRow={this.toggleRow}
                                     deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
@@ -327,7 +350,9 @@ class Table extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        list: state.customer.taskDetails,
+        list: state.task.taskDetails,
+        completedTask: state.task.completedTask,
+        pendingTask: state.task.pendingTask
     }
 }
 

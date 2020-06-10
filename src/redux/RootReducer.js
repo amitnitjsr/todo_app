@@ -1,18 +1,18 @@
 import storage from 'redux-persist/lib/storage'
 import { persistCombineReducers } from 'redux-persist'
 import BaseReducer from './BaseReducer';
-import customer from '../Container/Customer/Reducer';
+import task from '../Container/Task/Reducer';
 
 const rootReducer = {
     baseReducer: BaseReducer,
-    customer
+    task
 }
 
 export const persistConfig = {
     key: 'Project.0.0',
     storage,
     blacklist: [
-        'customer',
+        'task',
     ]
 }
 

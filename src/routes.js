@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 
 import App from './Container/home/App';
-import AddTask from './Container/Customer/Table';
+import AddTask from './Container/Task/Table';
 // import AddCustomer from './Container/Customer/Add';
 import PageNotFound from './Container/PageNotFound';
 // import PreLoading from './Component/PreLoading';
