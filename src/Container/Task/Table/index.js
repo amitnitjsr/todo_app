@@ -85,7 +85,9 @@ class Table extends React.Component {
             edit: false,
             id: 1,
             createdOn: '',
-            completed: false
+            completed: false,
+            viewModal: false,
+            viewData: null
         }
     }
     toggle = tab => {
@@ -113,9 +115,7 @@ class Table extends React.Component {
         })
     }
     inputChangeHandler = (name, value) => {
-        this.setState({ [name]: value }, () => {
-            console.log('date', this.state.priority)
-        });
+        this.setState({ [name]: value });
     }
 
     popupToggle = () => {
@@ -181,6 +181,18 @@ class Table extends React.Component {
         }
     }
 
+    viewDetails = (id) => {
+        let data = this.props.list.filter(f => id === f.id);
+        this.setState({ viewData: data }, () => {
+            console.log('viewData', this.state.viewData, this.state.viewData[0].summary)
+            this.viewToggle();
+        })
+    }
+    viewToggle = () => {
+        this.setState((prevState) => {
+            return { viewModal: !prevState.viewModal }
+        })
+    }
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
             this.props.searchTask({ "searchInput": this.state.searchInput });
@@ -198,7 +210,6 @@ class Table extends React.Component {
     }
     render() {
         const { list, completedTask, pendingTask } = this.props;
-        // const { completedTask } = this.props;
 
         let add_Edit_task = (
             <Dialog open={this.state.showModal} onClose={this.popupToggle}>
@@ -212,7 +223,8 @@ class Table extends React.Component {
                             >Summary:</span>
                         </Col>
                         <Col md='8' sm='8'>
-                            <input type='text' value={this.state.summary}
+                            <input type='text'
+                                value={this.state.summary}
                                 style={{ width: '220px' }}
                                 onChange={(event) => this.inputChangeHandler('summary', event.target.value)} />
                         </Col>
@@ -274,10 +286,85 @@ class Table extends React.Component {
                 </DialogActions>
             </Dialog >
         );
+
+        let viewDetails = (
+            <Dialog open={this.state.viewModal} onClose={this.viewToggle}>
+                <DialogTitle onClose={this.viewToggle} >
+                    {'View Details'}
+                </DialogTitle>
+                <DialogContent>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'  >
+                            <span
+                            >Summary:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <label>{this.state.viewData ? this.state.viewData[0].summary : null}</label>
+                        </Col>
+                    </Row>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'  >
+                            <span
+                            >Descriptions:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <textarea id="w3review" name="w3review" rows="4" cols="28"
+                                value={this.state.viewData ? this.state.viewData[0].description : null}
+                                disabled={true}
+                            />
+                        </Col>
+                    </Row>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'>
+                            <span >Priority:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <label>{this.state.viewData ? this.state.viewData[0].priority : null}</label>
+                        </Col>
+                    </Row>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'>
+                            <span >Created Date:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <label>{this.state.viewData ? this.state.viewData[0].createdOn : null}</label>
+                        </Col>
+                    </Row>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'>
+                            <span >Due Date:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <label>{this.state.viewData ? this.state.viewData[0].dueDate : null}</label>
+                        </Col>
+                    </Row>
+                    <Row style={{ padding: '5px' }}>
+                        <Col md='4' sm='4'>
+                            <span >Current Status:</span>
+                        </Col>
+                        <Col md='8' sm='8'>
+                            <label>{this.state.viewData ? this.state.viewData[0].completed ? 'Close' : 'Open' : null}</label>
+                        </Col>
+                    </Row>
+                </DialogContent>
+                <DialogActions>
+
+                    <Button style={{
+                        position: 'relative', left: '-4%'
+                    }}
+                        onClick={this.viewToggle
+                        }
+                    >
+                        {'Close'}
+                    </Button>
+                </DialogActions>
+            </Dialog >
+        );
         return (
             <div>
                 <Navbar />
                 {add_Edit_task}
+                {viewDetails}
                 <div style={{ padding: '5%' }}>
                     <Row >
                         <Col sm="3">
@@ -322,17 +409,17 @@ class Table extends React.Component {
                         </Nav>
                         <TabContent activeTab={this.state.activeTab}>
                             <TabPane tabId="1">
-                                <TableData list={list} toggleRow={this.toggleRow}
+                                <TableData list={list} toggleRow={this.toggleRow} viewDetails={this.viewDetails}
                                     deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="2">
-                                <TableData list={completedTask} toggleRow={this.toggleRow}
+                                <TableData list={completedTask} toggleRow={this.toggleRow} viewDetails={this.viewDetails}
                                     deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>
                             <TabPane tabId="3">
-                                <TableData list={pendingTask} toggleRow={this.toggleRow}
+                                <TableData list={pendingTask} toggleRow={this.toggleRow} viewDetails={this.viewDetails}
                                     deleteBtnHide={this.state.deleteBtnHide} reOpen={this.reOpen}
                                     selected={this.state.selected} editHandler={this.editHandler} />
                             </TabPane>

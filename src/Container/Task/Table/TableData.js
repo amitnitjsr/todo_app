@@ -42,7 +42,7 @@ export default class Table extends Component {
                                 return (
                                     <div>
                                         <Tooltip title={'Click on, View All Details'} placement="top">
-                                            <span onClick={() => this.props.reOpen(row.row._original.id)} style={{ cursor: 'pointer' }} >
+                                            <span onClick={() => this.props.viewDetails(row.row._original.id)} style={{ cursor: 'pointer' }} >
                                                 {row.row._original.summary}
                                             </span>
                                         </Tooltip>

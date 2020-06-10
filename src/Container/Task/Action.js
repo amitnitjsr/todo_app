@@ -56,15 +56,16 @@ export const editTask = (data) => {
 
 export const searchTask = (data) => {
     const { searchInput } = data;
-    console.log('searchTask', searchInput.length)
+
     return (dispatch, getState) => {
         const { taskDetails } = getState().task;
+
         if (searchInput.length > 0) {
             const newData = taskDetails.filter(data => {
-                return data.priority
-                    .toString()
+                if (data.summary.toLowerCase().includes(searchInput.toLowerCase()) || data.description
                     .toLowerCase()
-                    .includes(searchInput.toLowerCase())
+                    .includes(searchInput.toLowerCase()))
+                    return data
             })
             return dispatch({ type: types.SEARCH_TASK, payload: newData });
         }
@@ -72,7 +73,5 @@ export const searchTask = (data) => {
             console.log('else', searchInput.length)
             return dispatch({ type: types.SEARCH_TASK, payload: taskDetails });
         }
-
     }
-
 }
