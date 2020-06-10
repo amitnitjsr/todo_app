@@ -57,6 +57,17 @@ export default class Table extends Component {
                             className: 'text-center',
                         },
                         {
+                            Header: () => <div className="Header" >Current Status</div>,
+                            // accessor: 'priority',
+                            foldable: true,
+                            className: 'text-center',
+                            Cell: (row) => {
+                                return (
+                                    <span >{row.row._original.completed ? 'Close' : 'Pending'}</span>
+                                )
+                            },
+                        },
+                        {
                             Header: () => <div className="Header" >Created On</div>,
                             accessor: 'createdOn',
                             foldable: true,
