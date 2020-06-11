@@ -1,11 +1,9 @@
 import React from 'react';
-import ReactTable from 'react-table';
 import IconButton from '@material-ui/core/IconButton';
 import { Button } from 'reactstrap';
 import { withRouter } from 'react-router';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
-import Checkbox from '@material-ui/core/Checkbox';
 import * as action from '../Action';
 import Navbar from '../../../Component/Navbar/Navbar';
 import MuiDialogActions from '@material-ui/core/DialogActions';
@@ -115,6 +113,7 @@ class Table extends React.Component {
         })
     }
     inputChangeHandler = (name, value) => {
+        console.log('inputChangeHandler', value)
         this.setState({ [name]: value });
     }
 
@@ -250,12 +249,17 @@ class Table extends React.Component {
                         <Col md='8' sm='8'>
                             <select onClick={(event) => this.inputChangeHandler('priority', event.target.value)}
                             >
-                                {prio.map((val) => (
-                                    <option
-                                    >
-                                        {val.value}
-                                    </option>
-                                ))}
+                                {prio.map((val) => {
+                                    let selected = this.state.priority === val.value ? true : false;
+                                    return (
+                                        <option key={val.value}
+                                            selected={selected}
+                                        >
+                                            {val.value}
+                                        </option>
+                                    )
+                                }
+                                )}
                             </select>
                         </Col>
                     </Row>
