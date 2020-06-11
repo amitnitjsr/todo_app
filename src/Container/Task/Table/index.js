@@ -113,7 +113,6 @@ class Table extends React.Component {
         })
     }
     inputChangeHandler = (name, value) => {
-        console.log('inputChangeHandler', value)
         this.setState({ [name]: value });
     }
 
