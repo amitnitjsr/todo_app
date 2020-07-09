@@ -1,7 +1,8 @@
 import * as types from './ActionTypes';
 
 const initialState = {
-    taskDetails: [
+    taskDetails: [],
+    tempAllTaskList: [
         {
             'id': 1,
             'summary': 'Create a gist',
@@ -81,9 +82,10 @@ const getPendingTask = (list) => {
     return list.filter(f => f.completed === false);
 }
 
-const searchDataSet = (searchKey) => {
-    let tempData = initialState.taskDetails;
+const searchDataSet = (searchKey, state) => {
+    let tempData = state.tempAllTaskList;
     if (searchKey) {
+        // eslint-disable-next-line
         tempData = tempData.filter(d => {
             if (d.summary.toUpperCase().includes(searchKey.toUpperCase())) {
                 return d;
@@ -96,6 +98,7 @@ const searchDataSet = (searchKey) => {
 export default (state = initialState, action) => {
     state.completedTask = getCompletedTask(state.taskDetails)
     state.pendingTask = getPendingTask(state.taskDetails)
+    state.taskDetails = state.tempAllTaskList
 
     switch (action.type) {
         case types.CREATE_NEW_TASK:
@@ -104,6 +107,7 @@ export default (state = initialState, action) => {
             const data = { ...state, taskDetails: action.payload }
             state.completedTask = getCompletedTask(data.taskDetails);
             state.pendingTask = getPendingTask(data.taskDetails);
+            state.tempAllTaskList = data.taskDetails
             return {
                 ...state,
                 taskDetails: action.payload,
@@ -111,7 +115,7 @@ export default (state = initialState, action) => {
         case types.SEARCH_TASK:
             return {
                 ...state,
-                ...searchDataSet(action.payload)
+                ...searchDataSet(action.payload, state)
             }
         default:
             return state

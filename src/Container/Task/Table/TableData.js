@@ -108,7 +108,6 @@ export default class Table extends Component {
                     pageSize={list.length}
                     showPaginationBottom={false}
                 />
-
             </div>
         )
     }

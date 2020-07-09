@@ -88,15 +88,18 @@ class Table extends React.Component {
             viewData: null
         }
     }
+
     toggle = tab => {
         if (this.state.activeTab !== tab)
             this.setState({ activeTab: tab })
     }
+
     handleDateChange = (date) => {
         this.setState(
             { selectedDate: date }
         );
     };
+
     toggleRow = (row) => {
         const newSelected = Object.assign({}, this.state.selected);
         newSelected[row.id] = !this.state.selected[row.id];
@@ -112,6 +115,7 @@ class Table extends React.Component {
             }
         })
     }
+
     inputChangeHandler = (name, value) => {
         this.setState({ [name]: value });
     }
@@ -119,8 +123,9 @@ class Table extends React.Component {
     popupToggle = () => {
         this.setState((preState) => {
             return { showModal: !preState.showModal }
-        })
+        });
     }
+
     addToggle = () => {
         this.popupToggle();
         this.setState({
@@ -149,8 +154,6 @@ class Table extends React.Component {
             });
         }
         else {
-            // console.log(this.state.summary, this.state.description, this.state.priority,
-            //     createdOn, this.state.selectedDate);
             let createdOn = new Date();
             let dd = String(createdOn.getDate()).padStart(2, '0');
             let mm = String(createdOn.getMonth() + 1).padStart(2, '0');
@@ -187,28 +190,19 @@ class Table extends React.Component {
             this.viewToggle();
         })
     }
+
     viewToggle = () => {
         this.setState((prevState) => {
             return { viewModal: !prevState.viewModal }
         })
     }
+
     inputSearchHandler = (name, e) => {
         this.setState({ [name]: e.target.value }, () => {
-            // this.props.searchTask({ "searchInput": this.state.searchInput });
             this.props.searchTaskList({ "searchInput": this.state.searchInput });
-            // this.setState({ searchInput: '' })
-            // if (this.state.activeTab === '1') {
-            //     // All task -> list
-            //     // this.props.searchData(this.state.searchInput)
-            // }
-            // else if (this.state.activeTab === '2') {
-            //     // completed
-            // }
-            // else if (this.state.activeTab === '3') {
-            //     // pending
-            // }
         });
     }
+
     render() {
         const { list, completedTask, pendingTask } = this.props;
 

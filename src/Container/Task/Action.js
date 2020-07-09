@@ -54,27 +54,6 @@ export const editTask = (data) => {
     }
 }
 
-export const searchTask = (data) => {
-    const { searchInput } = data;
-
-    return (dispatch, getState) => {
-        const { taskDetails } = getState().task;
-
-        if (searchInput.length > 0) {
-            const newData = taskDetails.filter(data => {
-                if (data.summary.toLowerCase().includes(searchInput.toLowerCase()) || data.description
-                    .toLowerCase()
-                    .includes(searchInput.toLowerCase()))
-                    return data
-            })
-            return dispatch({ type: types.SEARCH_TASK, payload: newData });
-        }
-        else {
-            return dispatch({ type: types.SEARCH_TASK, payload: taskDetails });
-        }
-    }
-}
-
 export const searchTaskList = (searchKey) => {
     return (dispatch, getState) => {
         return dispatch({ type: types.SEARCH_TASK, payload: searchKey.searchInput })
